@@ -32,3 +32,15 @@ type MovieRecommend struct {
 type MovieRecommendResponse struct {
 	Movies []*MovieRecommend `json:"result"`
 }
+
+type CreateUserCommand struct {
+	Username    string `json:"username"`
+	Password    string `json:"password"`
+	FullName    string `json:"full_name"`
+	PhoneNumber string `json:"phone_number"`
+	Email       string `json:"email"`
+}
+
+func (cmd *CreateUserCommand) Exec(service CoreService) (interface{}, error) {
+	return service.SignUpUsingEmail(cmd)
+}

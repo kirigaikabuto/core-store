@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	movie_store "github.com/kirigaikabuto/movie-store"
+	users_store "github.com/kirigaikabuto/users-store"
 	"io/ioutil"
 	"net/http"
 )
@@ -13,6 +14,7 @@ type CoreService interface {
 	ListMovies(cmd *ListMoviesCommand) ([]movie_store.Movie, error)
 	GetMovieByName(cmd *GetMovieByNameCommand) (*movie_store.Movie, error)
 	GetMovieById(cmd *GetMovieByIdCommand) ([]movie_store.Movie, error)
+	SignUpUsingEmail(cmd *CreateUserCommand) (*users_store.User, error)
 }
 
 type coreService struct {
@@ -79,4 +81,12 @@ func (svc *coreService) GetMovieById(cmd *GetMovieByIdCommand) ([]movie_store.Mo
 		movies = append(movies, *newMovie)
 	}
 	return movies, nil
+}
+
+func (svc *coreService) SignUpUsingEmail(cmd *CreateUserCommand) (*users_store.User, error) {
+	newUser, err := svc.amqpRequests.CreateUser(cmd)
+	if err != nil {
+		return nil, err
+	}
+	return newUser, nil
 }

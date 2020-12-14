@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/djumanoff/amqp"
 	movie_store "github.com/kirigaikabuto/movie-store"
+	users_store "github.com/kirigaikabuto/users-store"
 )
 
 type AmqpRequests struct {
@@ -53,6 +54,19 @@ func (r *AmqpRequests) GetMovieById(cmd *GetMovieByIdCommand) (*movie_store.Movi
 		return nil, err
 	}
 	return movie, nil
+}
+
+func (r *AmqpRequests) CreateUser(cmd *CreateUserCommand) (*users_store.User, error) {
+	response, err := r.call("user.create", cmd)
+	if err != nil {
+		return nil, err
+	}
+	var user *users_store.User
+	err = json.Unmarshal(response.Body, &user)
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
 }
 
 func (r *AmqpRequests) call(path string, data interface{}) (*amqp.Message, error) {
