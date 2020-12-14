@@ -57,7 +57,7 @@ func (r *AmqpRequests) GetMovieById(cmd *GetMovieByIdCommand) (*movie_store.Movi
 }
 
 func (r *AmqpRequests) CreateUser(cmd *CreateUserCommand) (*users_store.User, error) {
-	response, err := r.call("user.create", cmd)
+	response, err := r.call("users.create", cmd)
 	if err != nil {
 		return nil, err
 	}
