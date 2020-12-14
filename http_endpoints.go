@@ -13,15 +13,15 @@ type HttpEndpointsFactory interface {
 }
 
 type httpEndpointsFactory struct {
-	userService UserService
+	coreService CoreService
 }
 
 type customError struct {
 	Message string `json:"message"`
 }
 
-func NewHttpEndpoints(userService UserService) HttpEndpointsFactory {
-	return &httpEndpointsFactory{userService: userService}
+func NewHttpEndpoints(userService CoreService) HttpEndpointsFactory {
+	return &httpEndpointsFactory{coreService: userService}
 }
 
 func (httpFac *httpEndpointsFactory) ListMoviesEndpoint() func(w http.ResponseWriter, r *http.Request) {
@@ -45,7 +45,7 @@ func (httpFac *httpEndpointsFactory) ListMoviesEndpoint() func(w http.ResponseWr
 			return
 		}
 		listMovieReq.Count = count
-		data, err := listMovieReq.Exec(httpFac.userService)
+		data, err := listMovieReq.Exec(httpFac.coreService)
 		if err != nil {
 			respondJSON(w, http.StatusInternalServerError, &customError{err.Error()})
 			return
@@ -81,7 +81,7 @@ func (httpFac *httpEndpointsFactory) GetMovieByIdEndpoint(idParam string) func(w
 				return
 			}
 		}
-		data, err := movieReq.Exec(httpFac.userService)
+		data, err := movieReq.Exec(httpFac.coreService)
 		if err != nil {
 			respondJSON(w, http.StatusInternalServerError, &customError{err.Error()})
 			return

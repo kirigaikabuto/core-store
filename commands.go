@@ -12,7 +12,7 @@ type GetMovieByNameCommand struct {
 	Name string `json:"name"`
 }
 
-func (cmd *GetMovieByNameCommand) Exec(service UserService) (interface{}, error) {
+func (cmd *GetMovieByNameCommand) Exec(service coreService) (interface{}, error) {
 	return service.GetMovieByName(cmd)
 }
 
@@ -20,7 +20,7 @@ type GetMovieByIdCommand struct {
 	Id int64 `json:"id"`
 }
 
-func (cmd *GetMovieByIdCommand) Exec(service UserService) (interface{}, error) {
+func (cmd *GetMovieByIdCommand) Exec(service coreService) (interface{}, error) {
 	return service.GetMovieById(cmd)
 }
 
