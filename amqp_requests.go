@@ -83,6 +83,9 @@ func (r *AmqpRequests) call(path string, data interface{}) (*amqp.Message, error
 	response, err := r.clt.Call(path, amqp.Message{
 		Body: jsonData,
 	})
+	if err != nil {
+		return nil, err
+	}
 	amqpError := &ErrorSt{}
 	err = json.Unmarshal(response.Body, &amqpError)
 	if err != nil {
