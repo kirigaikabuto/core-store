@@ -19,7 +19,7 @@ type coreService struct {
 	amqpRequests AmqpRequests
 }
 
-func NewUserService(amqpReq AmqpRequests) CoreService {
+func NewCoreService(amqpReq AmqpRequests) CoreService {
 	return &coreService{
 		amqpReq,
 	}
