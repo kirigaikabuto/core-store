@@ -2,6 +2,7 @@ package core_store
 
 import (
 	"encoding/json"
+	"errors"
 	"github.com/djumanoff/amqp"
 	movie_store "github.com/kirigaikabuto/movie-store"
 	users_store "github.com/kirigaikabuto/users-store"
@@ -9,6 +10,10 @@ import (
 
 type AmqpRequests struct {
 	clt amqp.Client
+}
+
+type ErrorSt struct {
+	Text string `json:"text"`
 }
 
 func NewAmqpRequests(clt amqp.Client) *AmqpRequests {
@@ -61,6 +66,7 @@ func (r *AmqpRequests) CreateUser(cmd *CreateUserCommand) (*users_store.User, er
 	if err != nil {
 		return nil, err
 	}
+
 	var user *users_store.User
 	err = json.Unmarshal(response.Body, &user)
 	if err != nil {
@@ -74,8 +80,16 @@ func (r *AmqpRequests) call(path string, data interface{}) (*amqp.Message, error
 	if err != nil {
 		return nil, err
 	}
-	respone, err := r.clt.Call(path, amqp.Message{
+	response, err := r.clt.Call(path, amqp.Message{
 		Body: jsonData,
 	})
-	return respone, nil
+	amqpError := &ErrorSt{}
+	err = json.Unmarshal(response.Body, &amqpError)
+	if err != nil {
+		return nil, err
+	}
+	if amqpError.Text != "" {
+		return nil, errors.New(amqpError.Text)
+	}
+	return response, nil
 }
