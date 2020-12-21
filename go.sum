@@ -63,6 +63,8 @@ github.com/kirigaikabuto/users-store v1.1.2-0.20201214124121-50bc2ae022fe h1:DWH
 github.com/kirigaikabuto/users-store v1.1.2-0.20201214124121-50bc2ae022fe/go.mod h1:mr8rw0n2gb5/GuV6ihGGQgdtrdXNRTpg0uWrpTN8Ois=
 github.com/kirigaikabuto/users-store v1.1.2-0.20201221084700-e5b53c7d5e42 h1:n6YocstEh0gqZ64jX1qGnwGMANyMIzwk4nhUgKtj4fY=
 github.com/kirigaikabuto/users-store v1.1.2-0.20201221084700-e5b53c7d5e42/go.mod h1:C+BI4JM64LMJD9ANVfqJBcrl5rMGqFA+7N2dRrgd8Tc=
+github.com/kirigaikabuto/users-store v1.1.2-0.20201221141508-4a7bcad3faff h1:tAnl6tiPYIDTvPd7oM5ZfWrkqlTfjwXZS+luE6xkzSk=
+github.com/kirigaikabuto/users-store v1.1.2-0.20201221141508-4a7bcad3faff/go.mod h1:Jz3ESsho4kr4dkO6RSBSz0lgCVkZ3hpbYogRIYqyAOI=
 github.com/klauspost/compress v1.9.5 h1:U+CaK85mrNNb4k8BNOfgJtJ/gr6kswUCFj6miSzVC6M=
 github.com/klauspost/compress v1.9.5/go.mod h1:RyIbtBH6LamlWaDj8nUwkbUhJ87Yi3uG0guNDohfE1A=
 github.com/konsorten/go-windows-terminal-sequences v0.0.0-20180402223658-b729f2633dfe/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=

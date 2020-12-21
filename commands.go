@@ -57,3 +57,7 @@ func (cmd *LoginUserCommand) Exec(service CoreService) (interface{}, error) {
 type GetUserByUsername struct {
 	Username string `json:"username"`
 }
+
+type LoginResponse struct {
+	AccessKey string `json:"access_key"`
+}

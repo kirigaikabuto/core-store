@@ -8,6 +8,7 @@ import (
 	acceess_token "github.com/kirigaikabuto/common-lib/access-token-middleware"
 	movie_store "github.com/kirigaikabuto/movie-store"
 	users_store "github.com/kirigaikabuto/users-store"
+	"golang.org/x/crypto/bcrypt"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -18,7 +19,7 @@ type CoreService interface {
 	GetMovieByName(cmd *GetMovieByNameCommand) (*movie_store.Movie, error)
 	GetMovieById(cmd *GetMovieByIdCommand) ([]movie_store.Movie, error)
 	SignUpUsingEmail(cmd *CreateUserCommand) (*users_store.User, error)
-	Login(cmd *LoginUserCommand) (*users_store.User, error)
+	Login(cmd *LoginUserCommand) (*LoginResponse, error)
 }
 
 type coreService struct {
@@ -97,8 +98,12 @@ func (svc *coreService) SignUpUsingEmail(cmd *CreateUserCommand) (*users_store.U
 	return newUser, nil
 }
 
-func (svc *coreService) Login(cmd *LoginUserCommand) (*users_store.User, error) {
+func (svc *coreService) Login(cmd *LoginUserCommand) (*LoginResponse, error) {
 	user, err := svc.amqpRequests.GetUserByUsername(&GetUserByUsername{cmd.Username})
+	if err != nil {
+		return nil, err
+	}
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(cmd.Password))
 	if err != nil {
 		return nil, err
 	}
@@ -108,6 +113,8 @@ func (svc *coreService) Login(cmd *LoginUserCommand) (*users_store.User, error) 
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(accessKey)
-	return user, nil
+	response := &LoginResponse{
+		accessKey,
+	}
+	return response, nil
 }
