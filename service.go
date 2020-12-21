@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	acceess_token "github.com/kirigaikabuto/common-lib/access-token-middleware"
 	movie_store "github.com/kirigaikabuto/movie-store"
 	users_store "github.com/kirigaikabuto/users-store"
 	"io/ioutil"
@@ -15,15 +16,18 @@ type CoreService interface {
 	GetMovieByName(cmd *GetMovieByNameCommand) (*movie_store.Movie, error)
 	GetMovieById(cmd *GetMovieByIdCommand) ([]movie_store.Movie, error)
 	SignUpUsingEmail(cmd *CreateUserCommand) (*users_store.User, error)
+	Login(cmd *LoginUserCommand) (*users_store.User, error)
 }
 
 type coreService struct {
-	amqpRequests AmqpRequests
+	amqpRequests     AmqpRequests
+	accessTokenStore acceess_token.AccessTokenStore
 }
 
-func NewCoreService(amqpReq AmqpRequests) CoreService {
+func NewCoreService(amqpReq AmqpRequests, accessTokenStore acceess_token.AccessTokenStore) CoreService {
 	return &coreService{
 		amqpReq,
+		accessTokenStore,
 	}
 }
 
@@ -89,4 +93,12 @@ func (svc *coreService) SignUpUsingEmail(cmd *CreateUserCommand) (*users_store.U
 		return nil, err
 	}
 	return newUser, nil
+}
+
+func (svc *coreService) Login(cmd *LoginUserCommand) (*users_store.User, error) {
+	user, err := svc.amqpRequests.GetUserByUsername(&GetUserByUsername{cmd.Username})
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
 }

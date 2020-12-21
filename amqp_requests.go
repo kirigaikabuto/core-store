@@ -61,6 +61,20 @@ func (r *AmqpRequests) GetMovieById(cmd *GetMovieByIdCommand) (*movie_store.Movi
 	return movie, nil
 }
 
+func (r *AmqpRequests) GetUserByUsername(cmd *GetUserByUsername) (*users_store.User, error) {
+	response, err := r.call("users.getByUsername", cmd)
+	if err != nil {
+		return nil, err
+	}
+
+	var user *users_store.User
+	err = json.Unmarshal(response.Body, &user)
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
+}
+
 func (r *AmqpRequests) CreateUser(cmd *CreateUserCommand) (*users_store.User, error) {
 	response, err := r.call("users.create", cmd)
 	if err != nil {

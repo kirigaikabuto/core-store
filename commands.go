@@ -44,3 +44,16 @@ type CreateUserCommand struct {
 func (cmd *CreateUserCommand) Exec(service CoreService) (interface{}, error) {
 	return service.SignUpUsingEmail(cmd)
 }
+
+type LoginUserCommand struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+func (cmd *LoginUserCommand) Exec(service CoreService) (interface{}, error) {
+	return service.Login(cmd)
+}
+
+type GetUserByUsername struct {
+	Username string `json:"username"`
+}
