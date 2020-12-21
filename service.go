@@ -3,6 +3,7 @@ package core_store
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/google/uuid"
 	acceess_token "github.com/kirigaikabuto/common-lib/access-token-middleware"
@@ -105,6 +106,9 @@ func (svc *coreService) Login(cmd *LoginUserCommand) (*LoginResponse, error) {
 	}
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(cmd.Password))
 	if err != nil {
+		if err == bcrypt.ErrMismatchedHashAndPassword{
+			return nil, errors.New("not correct password")
+		}
 		return nil, err
 	}
 	uuId := uuid.New()
