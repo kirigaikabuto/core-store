@@ -4,11 +4,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/google/uuid"
 	acceess_token "github.com/kirigaikabuto/common-lib/access-token-middleware"
 	movie_store "github.com/kirigaikabuto/movie-store"
 	users_store "github.com/kirigaikabuto/users-store"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
 type CoreService interface {
@@ -100,5 +102,12 @@ func (svc *coreService) Login(cmd *LoginUserCommand) (*users_store.User, error) 
 	if err != nil {
 		return nil, err
 	}
+	uuId := uuid.New()
+	accessKey := uuId.String()
+	err = svc.accessTokenStore.Save(user.Id, accessKey, 5*time.Minute)
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println(accessKey)
 	return user, nil
 }
