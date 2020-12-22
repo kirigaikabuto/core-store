@@ -119,7 +119,7 @@ func (httpFac *httpEndpointsFactory) Register() func(w http.ResponseWriter, r *h
 
 func (httpFac httpEndpointsFactory) Login() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		allowedHeaders := "Accept, Content-Type, Content-Length, Accept-Encoding, Authorization,X-CSRF-Token"
+		allowedHeaders := "Accept, Content-Type, Content-Length, Accept-Encoding, Authorization,X-CSRF-Token,Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 		w.Header().Set("Access-Control-Allow-Headers", allowedHeaders)
