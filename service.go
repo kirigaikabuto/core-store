@@ -19,7 +19,7 @@ type CoreService interface {
 	ListMovies(cmd *ListMoviesCommand) ([]movie_store.Movie, error)
 	GetMovieByName(cmd *GetMovieByNameCommand) (*movie_store.Movie, error)
 	GetMovieById(cmd *GetMovieByIdCommand) ([]movie_store.Movie, error)
-	SignUpUsingEmail(cmd *CreateUserCommand) (*users_store.User, error)
+	Register(cmd *CreateUserCommand) (*users_store.User, error)
 	Login(cmd *LoginUserCommand) (*LoginResponse, error)
 }
 
@@ -91,7 +91,7 @@ func (svc *coreService) GetMovieById(cmd *GetMovieByIdCommand) ([]movie_store.Mo
 	return movies, nil
 }
 
-func (svc *coreService) SignUpUsingEmail(cmd *CreateUserCommand) (*users_store.User, error) {
+func (svc *coreService) Register(cmd *CreateUserCommand) (*users_store.User, error) {
 	newUser, err := svc.amqpRequests.CreateUser(cmd)
 	if err != nil {
 		return nil, err
@@ -106,7 +106,7 @@ func (svc *coreService) Login(cmd *LoginUserCommand) (*LoginResponse, error) {
 	}
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(cmd.Password))
 	if err != nil {
-		if err == bcrypt.ErrMismatchedHashAndPassword{
+		if err == bcrypt.ErrMismatchedHashAndPassword {
 			return nil, errors.New("not correct password")
 		}
 		return nil, err
@@ -118,6 +118,7 @@ func (svc *coreService) Login(cmd *LoginUserCommand) (*LoginResponse, error) {
 		return nil, err
 	}
 	response := &LoginResponse{
+		user.Id,
 		accessKey,
 	}
 	return response, nil

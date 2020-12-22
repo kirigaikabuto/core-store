@@ -99,6 +99,7 @@ func (httpFac *httpEndpointsFactory) Register() func(w http.ResponseWriter, r *h
 		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 		w.Header().Set("Access-Control-Allow-Headers", allowedHeaders)
 		w.Header().Set("Access-Control-Expose-Headers", "Authorization")
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
 		userCmd := &CreateUserCommand{}
 		if r.Header.Get("Content-Type") == "application/json" {
 			err := json.NewDecoder(r.Body).Decode(userCmd)

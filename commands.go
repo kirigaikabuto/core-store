@@ -42,7 +42,7 @@ type CreateUserCommand struct {
 }
 
 func (cmd *CreateUserCommand) Exec(service CoreService) (interface{}, error) {
-	return service.SignUpUsingEmail(cmd)
+	return service.Register(cmd)
 }
 
 type LoginUserCommand struct {
@@ -59,5 +59,6 @@ type GetUserByUsername struct {
 }
 
 type LoginResponse struct {
+	UserId    string `json:"user_id"`
 	AccessKey string `json:"access_key"`
 }
