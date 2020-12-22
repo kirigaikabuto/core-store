@@ -139,7 +139,7 @@ func (httpFac httpEndpointsFactory) Login() func(w http.ResponseWriter, r *http.
 			respondJSON(w, http.StatusInternalServerError, &customError{err.Error()})
 			return
 		}
-		respondJSON(w, http.StatusCreated, data)
+		respondJSON(w, http.StatusOK, data)
 	}
 }
 
